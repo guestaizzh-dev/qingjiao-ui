@@ -24,6 +24,6 @@ el('overview-toggle').onclick=()=>toggleOverview();el('study-start').onclick=()=
 el('search').oninput=e=>{const q=e.target.value.trim();document.querySelectorAll('.nav-item').forEach(n=>{n.hidden=!n.textContent.includes(q);n.style.display=n.hidden?'none':''})};
 el('previous').onclick=()=>{const i=data.screens.findIndex(s=>s.id===current);go(data.screens[(i-1+data.screens.length)%data.screens.length].id)};
 el('next').onclick=()=>{const i=data.screens.findIndex(s=>s.id===current);go(data.screens[(i+1)%data.screens.length].id)};
-window.addEventListener('popstate',()=>{go(location.hash.slice(1)||'04',false);if(!location.hash)toggleOverview(true)});buildNav();go(location.hash.slice(1)||'04',false);if(!location.hash)toggleOverview(true);
+window.addEventListener('popstate',()=>{go(location.hash.slice(1)||'04',false);if(!location.hash)toggleOverview(true)});buildNav();go(location.hash.slice(1)||'04',false);toggleOverview(!location.hash);
 window.review={data,go,current:()=>current};
 </script></body></html>
