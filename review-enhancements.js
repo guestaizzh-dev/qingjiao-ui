@@ -96,6 +96,7 @@
       selectedCourse = 0;
     }
     const page = basePage("视频学习", "08");
+    if (selectedCourse === 0) page.classList.add("raster-video");
     const tabs = node("div", undefined, "course-tabs");
     tabs.setAttribute("role", "tablist");
     tabs.setAttribute("aria-label", "选择课程");
@@ -107,6 +108,7 @@
         root.querySelectorAll(".course-tab")[index].focus();
       }, "course-tab");
       tab.setAttribute("role", "tab");
+      tab.setAttribute("aria-label", course.title);
       tab.id = `course-tab-${index}`;
       tab.setAttribute("aria-selected", String(index === selectedCourse));
       tab.setAttribute("aria-controls", "course-panel");
@@ -325,10 +327,10 @@
   }
   function renderFeedback() {
     if (window.review.current() === "24A") {
-      document.getElementById("screen-image").src = encodeURI("24-正式批改反馈.png");
+      document.getElementById("screen-image").src = "assets/feedback-reference.png";
     }
     const base = node("div", undefined, "feedback-base");
-    base.append(node("div", "把1.2看作12个0.1，12×5＝60个0.1，也就是6；最后写上单位“千米”。", "feedback-solution"));
+    base.append(node("div", "先算12×5＝60，再除以10，得到6千米。", "feedback-solution"));
     const open = button("", openAnnotations, "annotation-trigger");
     open.setAttribute("aria-label", "查看批注详情");
     base.append(open);
@@ -344,6 +346,22 @@
     mark.append(icon("feedback"));
     entry.append(mark, text, node("span", "›", "feedback-entry-arrow"));
     root.append(entry);
+  }
+  function renderLogout() {
+    const shade = node("div", undefined, "logout-shade");
+    const dialog = node("section", undefined, "logout-dialog");
+    dialog.setAttribute("role", "dialog");
+    dialog.setAttribute("aria-modal", "true");
+    dialog.setAttribute("aria-labelledby", "logout-heading");
+    const heading = node("h3", "退出当前账号？");
+    heading.id = "logout-heading";
+    const actions = node("div", undefined, "logout-actions");
+    actions.append(
+      button("取消", () => go("27"), "logout-cancel"),
+      button("确认退出", () => go("01"), "logout-confirm"),
+    );
+    dialog.append(heading, node("p", "学习记录会保留，下次登录后可继续查看。"), actions);
+    root.append(shade, dialog);
   }
   function renderFeedbackCenter() {
     const back = button("", () => go("27"), "center-back");
@@ -419,10 +437,11 @@
     annotationIndex = null;
     root.replaceChildren();
     const current = window.review.current();
-    root.style.pointerEvents = ["10", "24", "24A", "27", "37"].includes(current) ? "auto" : "none";
+    root.style.pointerEvents = ["10", "24", "24A", "27", "29", "37"].includes(current) ? "auto" : "none";
     if (current === "10") renderVideo();
     if (current === "24" || current === "24A") renderFeedback();
     if (current === "27") renderMy();
+    if (current === "29") renderLogout();
     if (current === "37") renderFeedbackCenter();
   };
   document.addEventListener("keydown", event => {

@@ -489,3 +489,73 @@
 .center-human { left: 8.5%; top: 75.4%; width: 79%; height: 2.9%; gap: 9cqw; background: #fff; }
 .center-human label { display: flex; gap: 2cqw; align-items: center; color: #283447; font-size: 3.25cqw; white-space: nowrap; cursor: pointer; }
 .center-result { position: absolute; left: 8%; right: 8%; top: 88.1%; margin: 0; font-size: 2.6cqw; color: #567969; line-height: 1.6; }
+.raster-video { background: transparent; }
+.raster-video .native-status,
+.raster-video .native-nav h2,
+.raster-video .native-home-indicator { visibility: hidden; }
+.raster-video .native-nav { top: 6%; }
+.raster-video .native-back { color: transparent; }
+.raster-video .course-tabs { top: 12.3%; height: 5.4%; left: 3.7%; right: 2.6%; gap: 1cqw; grid-template-columns: 1.1fr 1fr 1.04fr; }
+.raster-video .course-tab { background: transparent; border-color: transparent; }
+.raster-video .course-tab > * { visibility: hidden; }
+.raster-video .demo-player {
+  left: 3.65%;
+  right: 3.5%;
+  top: 19.45%;
+  height: 27.1%;
+  background: transparent;
+  border: 0;
+  border-radius: 3.1cqw;
+}
+.raster-video .lesson-title,
+.raster-video .lesson-board-copy,
+.raster-video .lesson-equation { visibility: hidden; }
+.raster-video .ai-teacher {
+  left: 1.6%;
+  width: 27%;
+  height: 38%;
+  bottom: 13.8%;
+  background: transparent;
+  box-shadow: none;
+  border: 0;
+}
+.raster-video .ai-teacher span { visibility: hidden; }
+.raster-video .ai-teacher[hidden] { display: block; background: #e4f8ef; }
+.raster-video .player-controls { height: 12.8%; background: #244d43; }
+.raster-video .video-summary {
+  left: 3.25%;
+  right: 3%;
+  top: 48.25%;
+  height: 37.85%;
+  background: transparent;
+  box-shadow: none;
+}
+.raster-video .video-summary > :not(.summary-practice) { visibility: hidden; }
+.raster-video .summary-practice { background: transparent; color: transparent !important; }
+.feedback-entry { background: transparent; box-shadow: none; }
+.feedback-entry > * { visibility: hidden; }
+.logout-shade {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background: #183e3566;
+  pointer-events: auto;
+}
+.logout-dialog {
+  position: absolute;
+  z-index: 6;
+  left: 9%;
+  right: 9%;
+  top: 42%;
+  padding: 5.3cqw 4cqw 4.5cqw;
+  border-radius: 5cqw;
+  background: white;
+  pointer-events: auto;
+  text-align: center;
+}
+.logout-dialog h3 { margin: 0; font-size: 5cqw; color: #005347; }
+.logout-dialog p { margin: 3cqw 0 4.4cqw; color: #536a87; font-size: 3.3cqw; line-height: 1.7; }
+.logout-actions { display: flex; gap: 4cqw; }
+.logout-actions button { flex: 1; padding: 2.8cqw 1cqw; border-radius: 6cqw; border: 1px solid #d8efe7; font-size: 4cqw !important; font-weight: 650 !important; }
+.logout-cancel { background: #f0fbf6; color: #536a87; }
+.logout-confirm { background: #00c5ac; color: white !important; border-color: #00c5ac !important; }
