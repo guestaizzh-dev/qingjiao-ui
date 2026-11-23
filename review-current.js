@@ -171,6 +171,21 @@
     return field;
   }
 
+  function chooseHomeworkImages() {
+    const picker = element("input");
+    picker.type = "file";
+    picker.accept = "image/*";
+    picker.multiple = true;
+    picker.hidden = true;
+    picker.onchange = () => {
+      if (picker.files.length) go("06-06");
+      picker.remove();
+    };
+    picker.oncancel = () => picker.remove();
+    layer.append(picker);
+    picker.click();
+  }
+
   function renderForm(register) {
     const offset = (register ? 39 : -37) / 1846 * 100;
     form = {
@@ -243,6 +258,7 @@
   };
   const calendarDate = (week, day) => new Date(Date.UTC(2026, 10, 2 + week * 7 + day));
   const fullDate = date => `${date.getUTCMonth() + 1}月${date.getUTCDate()}日`;
+  const fromTrialHome = () => /^01-1[1-5]$/.test(entry);
   let speed = 1;
   let muted = false;
   let playing = false;
@@ -283,7 +299,9 @@
       ["学段", ["小学", "初中"]], ["年级", ["一年级", "二年级", "三年级", "四年级", "五年级", "六年级"]],
       ["版本", ["人教版", "北师大版", "苏教版"]], ["册别", ["上册", "下册"]]
     ], textbookSelection, () => go(Object.values(textbookSelection).every(value => ["小学", "一年级", "人教版", "上册"].includes(value)) ? "01-12" : "01-14")),
-    returnFromTextbook: () => go(entry === "03-10" ? entry : "01-11"),
+    addHomeworkImages: chooseHomeworkImages,
+    pendingLearningHome: () => go(fromTrialHome() ? entry : entry === "09-12" ? "01-11" : "00"),
+    pendingLearningProfile: () => go(fromTrialHome() || entry === "09-12" ? "09-12" : "09-09"),
     previousWeek: () => changeWeek(-1),
     nextWeek: () => changeWeek(1),
     video: () => { playing = !playing; notify(playing ? "已播放 · 演示" : "已暂停"); },
@@ -334,7 +352,7 @@
       actions.className = "review-actions";
       actions.append(
         button("继续拍照", () => { box.close(); go("06-06"); }),
-        button("演示已开启权限", () => { box.close(); go("06-26"); }),
+        button("演示已开启权限", () => { box.close(); chooseHomeworkImages(); }),
       );
       box.append(actions);
     },
