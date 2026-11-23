@@ -2230,7 +2230,8 @@ window.currentReviewScreens = [
         3.36
       ]
     ],
-    "file": "screens/03-10.png"
+    "file": "screens/03-10.png",
+    "revision": 2
   },
   {
     "id": "04-01",
@@ -3407,7 +3408,8 @@ window.currentReviewScreens = [
         2.93
       ]
     ],
-    "file": "screens/05-13.png"
+    "file": "screens/05-13.png",
+    "revision": 2
   },
   {
     "id": "05-14",
@@ -3917,7 +3919,8 @@ window.currentReviewScreens = [
         3.36
       ]
     ],
-    "file": "screens/06-04.png"
+    "file": "screens/06-04.png",
+    "revision": 2
   },
   {
     "id": "06-05",
@@ -4092,7 +4095,8 @@ window.currentReviewScreens = [
         3.36
       ]
     ],
-    "file": "screens/06-08.png"
+    "file": "screens/06-08.png",
+    "revision": 2
   },
   {
     "id": "06-09",
@@ -4894,7 +4898,8 @@ window.currentReviewScreens = [
         "06-08"
       ]
     ],
-    "file": "screens/06-26.png"
+    "file": "screens/06-26.png",
+    "revision": 2
   },
   {
     "id": "07-01",
@@ -6003,7 +6008,8 @@ window.currentReviewScreens = [
         3.09
       ]
     ],
-    "file": "screens/09-01.png"
+    "file": "screens/09-01.png",
+    "revision": 2
   },
   {
     "id": "09-02",
@@ -6055,7 +6061,8 @@ window.currentReviewScreens = [
         3.09
       ]
     ],
-    "file": "screens/09-02.png"
+    "file": "screens/09-02.png",
+    "revision": 2
   },
   {
     "id": "09-03",
@@ -6107,7 +6114,8 @@ window.currentReviewScreens = [
         3.09
       ]
     ],
-    "file": "screens/09-03.png"
+    "file": "screens/09-03.png",
+    "revision": 2
   },
   {
     "id": "09-04",
@@ -6151,7 +6159,8 @@ window.currentReviewScreens = [
         3.58
       ]
     ],
-    "file": "screens/09-04.png"
+    "file": "screens/09-04.png",
+    "revision": 2
   },
   {
     "id": "09-05",
@@ -6203,7 +6212,8 @@ window.currentReviewScreens = [
         3.52
       ]
     ],
-    "file": "screens/09-05.png"
+    "file": "screens/09-05.png",
+    "revision": 2
   },
   {
     "id": "09-06",
@@ -6279,7 +6289,8 @@ window.currentReviewScreens = [
         3.09
       ]
     ],
-    "file": "screens/09-06.png"
+    "file": "screens/09-06.png",
+    "revision": 2
   },
   {
     "id": "09-07",
@@ -6339,7 +6350,8 @@ window.currentReviewScreens = [
         3.09
       ]
     ],
-    "file": "screens/09-07.png"
+    "file": "screens/09-07.png",
+    "revision": 2
   },
   {
     "id": "09-08",
@@ -6399,7 +6411,8 @@ window.currentReviewScreens = [
         3.09
       ]
     ],
-    "file": "screens/09-08.png"
+    "file": "screens/09-08.png",
+    "revision": 2
   },
   {
     "id": "09-09",
@@ -6463,7 +6476,8 @@ window.currentReviewScreens = [
         "09-14"
       ]
     ],
-    "file": "screens/09-09.png"
+    "file": "screens/09-09.png",
+    "revision": 2
   },
   {
     "id": "09-10",
@@ -6527,7 +6541,8 @@ window.currentReviewScreens = [
         "09-14"
       ]
     ],
-    "file": "screens/09-10.png"
+    "file": "screens/09-10.png",
+    "revision": 2
   },
   {
     "id": "09-11",
@@ -6591,7 +6606,8 @@ window.currentReviewScreens = [
         "09-14"
       ]
     ],
-    "file": "screens/09-11.png"
+    "file": "screens/09-11.png",
+    "revision": 2
   },
   {
     "id": "09-12",
@@ -6663,7 +6679,8 @@ window.currentReviewScreens = [
         "09-14"
       ]
     ],
-    "file": "screens/09-12.png"
+    "file": "screens/09-12.png",
+    "revision": 2
   },
   {
     "id": "09-13",
@@ -6691,7 +6708,8 @@ window.currentReviewScreens = [
         4.01
       ]
     ],
-    "file": "screens/09-13.png"
+    "file": "screens/09-13.png",
+    "revision": 2
   },
   {
     "id": "09-14",
@@ -6719,7 +6737,8 @@ window.currentReviewScreens = [
         4.01
       ]
     ],
-    "file": "screens/09-14.png"
+    "file": "screens/09-14.png",
+    "revision": 2
   },
   {
     "id": "10-01",
