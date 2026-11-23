@@ -11,6 +11,7 @@
   let codeSent = false;
   let toastTimer;
   let atlasState;
+  let dismissPreview;
   const id = () => window.review.current();
   const go = target => {
     const source = id();
@@ -171,15 +172,16 @@
   }
 
   function renderForm(register) {
+    const offset = (register ? 39 : -37) / 1846 * 100;
     form = {
-      phone: input("手机号", "请输入手机号", 24.5, register ? 38.0 : 42.15, 60, 11),
-      code: input("短信验证码", "请输入短信验证码", 11.7, register ? 55.2 : 50.8, 50, 6),
-      name: register ? input("学生姓名", "请输入学生姓名", 11.7, 46.7, 75) : null,
+      phone: input("手机号", "请输入手机号", 24.5, (register ? 38.0 : 42.15) + offset, 60, 11),
+      code: input("短信验证码", "请输入短信验证码", 11.7, (register ? 55.2 : 50.8) + offset, 50, 6),
+      name: register ? input("学生姓名", "请输入学生姓名", 11.7, 46.7 + offset, 75) : null,
     };
     consent = element("input");
     consent.type = "checkbox";
     consent.setAttribute("aria-label", "已阅读并同意协议");
-    Object.assign(consent.style, { left: "7.9%", top: register ? "61.7%" : "57.5%" });
+    Object.assign(consent.style, { left: "7.9%", top: ((register ? 61.7 : 57.5) + offset) + "%" });
     layer.append(consent);
     form.code.onkeydown = event => {
       if (event.key === "Enter") window.currentReviewAction("auth");
@@ -237,6 +239,8 @@
   let playing = false;
   const handlers = {
     back: returnTo,
+    returnToDraft: () => go(/^06-(05|07|16|25)$/.test(entry) ? entry : "06-05"),
+    returnToUpload: () => go(/^06-(11|13|14|22)$/.test(entry) ? entry : "06-11"),
     returnProfile: () => go(/^09-(09|10|11|12)$/.test(entry) ? entry : "09-09"),
     backFromFeedback: () => go(activityReturn || "04-05"),
     backFromHomework: () => go(activityReturn || "04-06"),
@@ -361,11 +365,26 @@
     document.querySelector(".review-dialog")?.close();
     document.querySelector(".review-toast")?.remove();
     layer.replaceChildren();
+    dismissPreview = page.dismissDialog;
+    const hotspotLayer = document.getElementById("hotspots");
+    if (dismissPreview) {
+      hotspotLayer.setAttribute("role", "dialog");
+      hotspotLayer.setAttribute("aria-label", page.title || page.name);
+    } else {
+      hotspotLayer.removeAttribute("role");
+      hotspotLayer.removeAttribute("aria-label");
+    }
     form = consent = null;
     if (page.form) renderForm(page.form === "register");
     if (page.id === "08-01") atlasState = null;
     if (page.atlas && page.id !== "08-01") layer.append(atlas(page.id.slice(3)));
   };
+  window.addEventListener("keydown", event => {
+    if (event.key === "Escape" && dismissPreview && !document.querySelector("dialog[open]")) {
+      event.preventDefault();
+      window.currentReviewAction(dismissPreview.slice(1));
+    }
+  });
   window.addEventListener("message", event => {
     if (event.origin !== location.origin) return;
     const modal = document.querySelector(".review-dialog .atlas-frame");

@@ -1131,7 +1131,7 @@ window.currentReviewScreens = [
         "获取验证码",
         "!sms",
         67.16,
-        50.62,
+        48.62,
         22.76,
         3.96
       ],
@@ -1139,7 +1139,7 @@ window.currentReviewScreens = [
         "勾选同意协议",
         "!consent",
         7.7,
-        57.0,
+        55.0,
         5.6,
         4.0
       ],
@@ -1147,7 +1147,7 @@ window.currentReviewScreens = [
         "用户协议",
         "!userPolicy",
         32,
-        56.3,
+        54.3,
         15.4,
         4.0
       ],
@@ -1155,7 +1155,7 @@ window.currentReviewScreens = [
         "隐私政策",
         "!privacy",
         50,
-        55.9,
+        53.9,
         16,
         3.8
       ],
@@ -1163,7 +1163,7 @@ window.currentReviewScreens = [
         "儿童隐私政策",
         "!childPrivacy",
         70,
-        55.9,
+        53.9,
         21,
         3.8
       ],
@@ -1178,14 +1178,15 @@ window.currentReviewScreens = [
       [
         "创建账号",
         "02-02",
-        12.17,
-        58.32,
-        55.25,
-        4.12
+        52.58,
+        87.22,
+        19.25,
+        3.95
       ]
     ],
     "form": "login",
-    "file": "screens/02-01.png"
+    "file": "screens/02-01.png",
+    "revision": 3
   },
   {
     "id": "02-02",
@@ -1199,10 +1200,18 @@ window.currentReviewScreens = [
     ],
     "controls": [
       [
+        "返回登录",
+        "02-01",
+        5.63,
+        4.88,
+        9.39,
+        4.01
+      ],
+      [
         "获取验证码",
         "!sms",
         66.73,
-        54.62,
+        56.73,
         23.21,
         4.22
       ],
@@ -1210,7 +1219,7 @@ window.currentReviewScreens = [
         "勾选同意协议",
         "!consent",
         7.7,
-        61.0,
+        63.11,
         5.6,
         4.0
       ],
@@ -1218,7 +1227,7 @@ window.currentReviewScreens = [
         "用户协议",
         "!userPolicy",
         32,
-        60.6,
+        62.71,
         15.4,
         4.0
       ],
@@ -1226,7 +1235,7 @@ window.currentReviewScreens = [
         "隐私政策",
         "!privacy",
         50,
-        60.6,
+        62.71,
         16,
         3.8
       ],
@@ -1234,7 +1243,7 @@ window.currentReviewScreens = [
         "儿童隐私政策",
         "!childPrivacy",
         70,
-        60.6,
+        62.71,
         21,
         3.8
       ],
@@ -1249,14 +1258,15 @@ window.currentReviewScreens = [
       [
         "去登录",
         "02-01",
-        32.58,
-        87.14,
-        34.83,
-        4.15
+        51.41,
+        87.22,
+        17.14,
+        3.95
       ]
     ],
     "form": "register",
-    "file": "screens/02-02.png"
+    "file": "screens/02-02.png",
+    "revision": 3
   },
   {
     "id": "02-03",
@@ -4108,31 +4118,25 @@ window.currentReviewScreens = [
     ],
     "controls": [
       [
-        "返回",
-        "!back",
-        1.5,
-        4.3,
-        11,
-        4.8
-      ],
-      [
         "继续检查",
-        "!back",
-        16.73,
-        90.03,
-        18.62,
-        4.18
+        "!returnToDraft",
+        13.03,
+        54.71,
+        35.21,
+        4.98
       ],
       [
         "确认提交",
         "06-10",
-        3.83,
-        69.86,
-        44.83,
-        4.91
+        51.76,
+        54.71,
+        35.21,
+        4.98
       ]
     ],
-    "file": "screens/06-09.png"
+    "file": "screens/06-09.png",
+    "revision": 3,
+    "dismissDialog": "!returnToDraft"
   },
   {
     "id": "06-10",
@@ -4224,31 +4228,25 @@ window.currentReviewScreens = [
     ],
     "controls": [
       [
-        "返回",
-        "!back",
-        1.5,
-        4.3,
-        11,
-        4.8
-      ],
-      [
         "确认取消",
         "06-25",
-        16.74,
-        89.08,
-        18.19,
-        4.15
+        13.03,
+        54.71,
+        35.21,
+        4.98
       ],
       [
         "继续上传",
-        "!back",
-        4.24,
-        27.34,
-        27.76,
-        4.16
+        "!returnToUpload",
+        51.76,
+        54.71,
+        35.21,
+        4.98
       ]
     ],
-    "file": "screens/06-12.png"
+    "file": "screens/06-12.png",
+    "revision": 3,
+    "dismissDialog": "!returnToUpload"
   },
   {
     "id": "06-13",
@@ -6694,22 +6692,23 @@ window.currentReviewScreens = [
       [
         "取消",
         "!returnProfile",
-        5.16,
-        91.39,
-        43.66,
-        4.01
+        13.03,
+        54.71,
+        35.21,
+        4.98
       ],
       [
         "确认退出",
         "02-01",
-        51.17,
-        91.39,
-        43.66,
-        4.01
+        51.76,
+        54.71,
+        35.21,
+        4.98
       ]
     ],
     "file": "screens/09-13.png",
-    "revision": 2
+    "revision": 3,
+    "dismissDialog": "!returnProfile"
   },
   {
     "id": "09-14",
@@ -6723,22 +6722,23 @@ window.currentReviewScreens = [
       [
         "继续留在这里",
         "!returnProfile",
-        5.16,
-        91.39,
-        43.66,
-        4.01
+        13.03,
+        54.71,
+        35.21,
+        4.98
       ],
       [
         "查看上传进度",
         "06-11",
-        51.17,
-        91.39,
-        43.66,
-        4.01
+        51.76,
+        54.71,
+        35.21,
+        4.98
       ]
     ],
     "file": "screens/09-14.png",
-    "revision": 2
+    "revision": 3,
+    "dismissDialog": "!returnProfile"
   },
   {
     "id": "10-01",
