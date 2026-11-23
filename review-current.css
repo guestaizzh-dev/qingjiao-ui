@@ -116,3 +116,81 @@
   position: absolute; width: 1px; height: 1px; overflow: hidden;
   clip-path: inset(50%); white-space: nowrap;
 }
+
+.detail #feature { color: #23483d; font-size: 14px; font-weight: 600; }
+.detail #requirements { font-size: 11px; color: #527166; line-height: 1.55; }
+.detail #rules li { color: #405f55; font-size: 13px; }
+.detail #rules li + li { margin-top: 8px; }
+.action-links .action-card { display: grid; gap: 5px; }
+.action-head {
+  display: flex; flex-wrap: wrap; align-items: baseline;
+  justify-content: space-between; gap: 4px 12px;
+}
+.action-head strong { font-weight: 650; }
+.action-target { font-size: 11px; color: #23644f; }
+.action-detail { display: block; color: #4d6b60; font-size: 11px; line-height: 1.6; }
+#examples .action-card { background: #f3f7f4; }
+
+.review-dialog input:not([type=radio]) {
+  border: 1px solid #caddd4; border-radius: 8px;
+  background: #f7fbf9; color: #164b43; font: inherit; padding: 8px 12px;
+}
+.review-dialog [hidden] { display: none; }
+.review-dialog .viewer .annotation-art {
+  aspect-ratio: 4 / 3;
+  background: url("assets/annotation-samples.png") no-repeat;
+  background-size: 200% 400%;
+}
+.review-dialog .viewer .annotation-art.single {
+  background-image: url("assets/annotation-six.png");
+  background-position: center !important;
+  background-size: cover;
+}
+.print-worksheet > div { break-inside: avoid; }
+.review-course-actions { display: grid; gap: 8px; }
+.review-course-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; border-top: 1px solid #dce8e0; padding: 9px 0;
+}
+
+.sms-countdown {
+  position: absolute; left: 68.3%; width: 21%; height: 3.1%;
+  place-items: center; color: #5b746a; background: #f4f6f6;
+  font-size: 3.35cqw; font-weight: 600;
+}
+.sms-countdown:not([hidden]) { display: grid; }
+.textbook-option, .textbook-confirm-disabled, .textbook-grade-cover { position: absolute; }
+.textbook-option {
+  border: 1px solid #dcebe4; border-radius: 2.3cqw;
+  background: #f7fbf9; color: #355b4d; font-size: 3.3cqw;
+}
+.textbook-option[aria-pressed=true] {
+  border-color: #86c6ac; background: #ddf5e9; color: #0b684f; font-weight: 650;
+}
+.textbook-option[aria-pressed=true]::after { content: " ✓"; }
+.textbook-grade-cover { background: #fff; }
+.textbook-confirm-disabled {
+  display: grid; place-items: center; background: #e3ede7;
+  color: #627a6f; border-radius: 2.8cqw; font-size: 3.6cqw; font-weight: 650;
+}
+
+.playback-clock, .playback-rate {
+  position: absolute; display: grid; place-items: center;
+  background: #193b30; color: #fff; font-variant-numeric: tabular-nums;
+  font-size: 2.65cqw; font-weight: 600; white-space: nowrap;
+}
+.review-interactive .playback-position {
+  position: absolute; appearance: none; border: 0; margin: 0;
+  background: #193b30;
+}
+.review-interactive progress.playback-position { height: .68cqw !important; translate: 0 1.15cqw; pointer-events: none; }
+.playback-position::-webkit-progress-bar { background: #577b70; border-radius: 1cqw; }
+.playback-position::-webkit-progress-value { background: #91dfc0; border-radius: 1cqw; }
+.playback-position::-webkit-slider-runnable-track {
+  height: .68cqw; border-radius: 1cqw;
+  background: linear-gradient(to right, #91dfc0 var(--played), #577b70 var(--played));
+}
+.playback-position::-webkit-slider-thumb {
+  appearance: none; width: 1.8cqw; height: 1.8cqw; margin-top: -.56cqw;
+  border-radius: 50%; background: #fff;
+}
