@@ -841,7 +841,7 @@ window.currentReviewScreens = [
     "controls": [
       [
         "关闭",
-        "01-11",
+        "!returnFromTextbook",
         84,
         54,
         12,
@@ -1363,7 +1363,7 @@ window.currentReviewScreens = [
       ],
       [
         "周一",
-        "03-02",
+        "!calendarDay0",
         6.3,
         18,
         12,
@@ -1371,7 +1371,7 @@ window.currentReviewScreens = [
       ],
       [
         "周二",
-        "03-04",
+        "!calendarDay1",
         18.85,
         18,
         12,
@@ -1379,7 +1379,7 @@ window.currentReviewScreens = [
       ],
       [
         "周三",
-        "03-01",
+        "!calendarDay2",
         31.4,
         18,
         12,
@@ -1387,7 +1387,7 @@ window.currentReviewScreens = [
       ],
       [
         "周四",
-        "03-04",
+        "!calendarDay3",
         43.95,
         18,
         12,
@@ -1395,7 +1395,7 @@ window.currentReviewScreens = [
       ],
       [
         "周五",
-        "03-03",
+        "!calendarDay4",
         56.5,
         18,
         12,
@@ -1403,7 +1403,7 @@ window.currentReviewScreens = [
       ],
       [
         "周六",
-        "03-04",
+        "!calendarDay5",
         69.05,
         18,
         12,
@@ -1411,7 +1411,7 @@ window.currentReviewScreens = [
       ],
       [
         "周日",
-        "03-04",
+        "!calendarDay6",
         81.6,
         18,
         12,
@@ -1501,7 +1501,7 @@ window.currentReviewScreens = [
       ],
       [
         "周一",
-        "03-02",
+        "!calendarDay0",
         6.3,
         18,
         12,
@@ -1509,7 +1509,7 @@ window.currentReviewScreens = [
       ],
       [
         "周二",
-        "03-04",
+        "!calendarDay1",
         18.85,
         18,
         12,
@@ -1517,7 +1517,7 @@ window.currentReviewScreens = [
       ],
       [
         "周三",
-        "03-01",
+        "!calendarDay2",
         31.4,
         18,
         12,
@@ -1525,7 +1525,7 @@ window.currentReviewScreens = [
       ],
       [
         "周四",
-        "03-04",
+        "!calendarDay3",
         43.95,
         18,
         12,
@@ -1533,7 +1533,7 @@ window.currentReviewScreens = [
       ],
       [
         "周五",
-        "03-03",
+        "!calendarDay4",
         56.5,
         18,
         12,
@@ -1541,7 +1541,7 @@ window.currentReviewScreens = [
       ],
       [
         "周六",
-        "03-04",
+        "!calendarDay5",
         69.05,
         18,
         12,
@@ -1549,7 +1549,7 @@ window.currentReviewScreens = [
       ],
       [
         "周日",
-        "03-04",
+        "!calendarDay6",
         81.6,
         18,
         12,
@@ -1639,7 +1639,7 @@ window.currentReviewScreens = [
       ],
       [
         "周一",
-        "03-02",
+        "!calendarDay0",
         6.3,
         18,
         12,
@@ -1647,7 +1647,7 @@ window.currentReviewScreens = [
       ],
       [
         "周二",
-        "03-04",
+        "!calendarDay1",
         18.85,
         18,
         12,
@@ -1655,7 +1655,7 @@ window.currentReviewScreens = [
       ],
       [
         "周三",
-        "03-01",
+        "!calendarDay2",
         31.4,
         18,
         12,
@@ -1663,7 +1663,7 @@ window.currentReviewScreens = [
       ],
       [
         "周四",
-        "03-04",
+        "!calendarDay3",
         43.95,
         18,
         12,
@@ -1671,7 +1671,7 @@ window.currentReviewScreens = [
       ],
       [
         "周五",
-        "03-03",
+        "!calendarDay4",
         56.5,
         18,
         12,
@@ -1679,7 +1679,7 @@ window.currentReviewScreens = [
       ],
       [
         "周六",
-        "03-04",
+        "!calendarDay5",
         69.05,
         18,
         12,
@@ -1687,7 +1687,7 @@ window.currentReviewScreens = [
       ],
       [
         "周日",
-        "03-04",
+        "!calendarDay6",
         81.6,
         18,
         12,
@@ -1738,9 +1738,10 @@ window.currentReviewScreens = [
     "id": "03-04",
     "module": "学习计划",
     "title": "当日暂无安排",
-    "feature": "按周查看学习安排，选择日期后显示对应课时。",
+    "feature": "选中没有已发布课程的日期时，周历下方显示青椒空态。",
     "rules": [
-      "有课日期用圆点标记。未来练习可预览，视频和提交在学习日开放。"
+      "点周历里的日期，原位更新选中日期和下方内容。有已发布课程的日期用圆点标记。",
+      "用左右箭头切换周次。点「回到本周」，返回当天的学习安排。"
     ],
     "controls": [
       [
@@ -1761,7 +1762,7 @@ window.currentReviewScreens = [
       ],
       [
         "周一",
-        "03-02",
+        "!calendarDay0",
         6.3,
         18,
         12,
@@ -1769,7 +1770,7 @@ window.currentReviewScreens = [
       ],
       [
         "周二",
-        "03-04",
+        "!calendarDay1",
         18.85,
         18,
         12,
@@ -1777,7 +1778,7 @@ window.currentReviewScreens = [
       ],
       [
         "周三",
-        "03-01",
+        "!calendarDay2",
         31.4,
         18,
         12,
@@ -1785,7 +1786,7 @@ window.currentReviewScreens = [
       ],
       [
         "周四",
-        "03-04",
+        "!calendarDay3",
         43.95,
         18,
         12,
@@ -1793,7 +1794,7 @@ window.currentReviewScreens = [
       ],
       [
         "周五",
-        "03-03",
+        "!calendarDay4",
         56.5,
         18,
         12,
@@ -1801,7 +1802,7 @@ window.currentReviewScreens = [
       ],
       [
         "周六",
-        "03-04",
+        "!calendarDay5",
         69.05,
         18,
         12,
@@ -1809,7 +1810,7 @@ window.currentReviewScreens = [
       ],
       [
         "周日",
-        "03-04",
+        "!calendarDay6",
         81.6,
         18,
         12,
@@ -1840,7 +1841,8 @@ window.currentReviewScreens = [
         3.81
       ]
     ],
-    "file": "screens/03-04.png"
+    "file": "screens/03-04.png",
+    "revision": 4
   },
   {
     "id": "03-05",
@@ -1935,7 +1937,7 @@ window.currentReviewScreens = [
       ],
       [
         "周一",
-        "03-02",
+        "!calendarDay0",
         6.3,
         24.77,
         12,
@@ -1943,7 +1945,7 @@ window.currentReviewScreens = [
       ],
       [
         "周二",
-        "03-04",
+        "!calendarDay1",
         18.85,
         24.77,
         12,
@@ -1951,7 +1953,7 @@ window.currentReviewScreens = [
       ],
       [
         "周三",
-        "03-01",
+        "!calendarDay2",
         31.4,
         24.77,
         12,
@@ -1959,7 +1961,7 @@ window.currentReviewScreens = [
       ],
       [
         "周四",
-        "03-04",
+        "!calendarDay3",
         43.95,
         24.77,
         12,
@@ -1967,7 +1969,7 @@ window.currentReviewScreens = [
       ],
       [
         "周五",
-        "03-03",
+        "!calendarDay4",
         56.5,
         24.77,
         12,
@@ -1975,7 +1977,7 @@ window.currentReviewScreens = [
       ],
       [
         "周六",
-        "03-04",
+        "!calendarDay5",
         69.05,
         24.77,
         12,
@@ -1983,7 +1985,7 @@ window.currentReviewScreens = [
       ],
       [
         "周日",
-        "03-04",
+        "!calendarDay6",
         81.6,
         24.77,
         12,
@@ -2117,7 +2119,7 @@ window.currentReviewScreens = [
       ],
       [
         "周一",
-        "03-02",
+        "!calendarDay0",
         6.3,
         24.77,
         12,
@@ -2125,7 +2127,7 @@ window.currentReviewScreens = [
       ],
       [
         "周二",
-        "03-04",
+        "!calendarDay1",
         18.85,
         24.77,
         12,
@@ -2133,7 +2135,7 @@ window.currentReviewScreens = [
       ],
       [
         "周三",
-        "03-01",
+        "!calendarDay2",
         31.4,
         24.77,
         12,
@@ -2141,7 +2143,7 @@ window.currentReviewScreens = [
       ],
       [
         "周四",
-        "03-04",
+        "!calendarDay3",
         43.95,
         24.77,
         12,
@@ -2149,7 +2151,7 @@ window.currentReviewScreens = [
       ],
       [
         "周五",
-        "03-03",
+        "!calendarDay4",
         56.5,
         24.77,
         12,
@@ -2157,7 +2159,7 @@ window.currentReviewScreens = [
       ],
       [
         "周六",
-        "03-04",
+        "!calendarDay5",
         69.05,
         24.77,
         12,
@@ -2165,7 +2167,7 @@ window.currentReviewScreens = [
       ],
       [
         "周日",
-        "03-04",
+        "!calendarDay6",
         81.6,
         24.77,
         12,
@@ -2210,14 +2212,15 @@ window.currentReviewScreens = [
     "id": "03-10",
     "module": "学习计划",
     "title": "新用户 · 免费课程包",
-    "feature": "等待老师确认学习计划时，可以先从课程包选教材试课。",
+    "feature": "在学习页领取免费课程包。",
     "rules": [
-      "有课日期用圆点标记。未来练习可预览，视频和提交在学习日开放。"
+      "点整行「免费课程包」进入教材选择。选择学段、年级、版本和册别后确认。",
+      "匹配成功即可开始学习。暂无匹配时，可以换教材再试。"
     ],
     "controls": [
       [
         "首页",
-        "00",
+        "01-11",
         1,
         89.4,
         32.8,
@@ -2232,16 +2235,16 @@ window.currentReviewScreens = [
         8.9
       ],
       [
-        "查看免费课程包",
-        "01-11",
-        59.33,
-        66.31,
-        31.98,
-        3.36
+        "领取免费课程包",
+        "01-16",
+        3.76,
+        9.8,
+        92.49,
+        5.85
       ]
     ],
     "file": "screens/03-10.png",
-    "revision": 2
+    "revision": 4
   },
   {
     "id": "04-01",

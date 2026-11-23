@@ -234,6 +234,15 @@
     ["6", "2.5 × 4", "10"], ["7", "0.12 × 3", "0.36"], ["8", "1.6 × 5", "8"], ["9", "0.9 × 7", "6.3"]
   ];
   const textbookSelection = {};
+  const weekdays = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"];
+  const publishedDays = ["03-02", null, "03-01", null, "03-03", null, null];
+  const defaultDays = { "03-02": 0, "03-03": 4, "03-04": 3 };
+  const calendarSelection = () => (id() === "03-04" && history.state?.calendar) || {
+    week: 0,
+    day: defaultDays[id()] ?? 2,
+  };
+  const calendarDate = (week, day) => new Date(Date.UTC(2026, 10, 2 + week * 7 + day));
+  const fullDate = date => `${date.getUTCMonth() + 1}月${date.getUTCDate()}日`;
   let speed = 1;
   let muted = false;
   let playing = false;
@@ -274,8 +283,9 @@
       ["学段", ["小学", "初中"]], ["年级", ["一年级", "二年级", "三年级", "四年级", "五年级", "六年级"]],
       ["版本", ["人教版", "北师大版", "苏教版"]], ["册别", ["上册", "下册"]]
     ], textbookSelection, () => go(Object.values(textbookSelection).every(value => ["小学", "一年级", "人教版", "上册"].includes(value)) ? "01-12" : "01-14")),
-    previousWeek: () => week("上一周", ["10 月 26 日", "10 月 28 日", "10 月 30 日"]),
-    nextWeek: () => week("下一周", ["11 月 9 日", "11 月 11 日", "11 月 13 日"]),
+    returnFromTextbook: () => go(entry === "03-10" ? entry : "01-11"),
+    previousWeek: () => changeWeek(-1),
+    nextWeek: () => changeWeek(1),
     video: () => { playing = !playing; notify(playing ? "已播放 · 演示" : "已暂停"); },
     speed: () => {
       const selection = { 倍速: String(speed) };
@@ -341,15 +351,59 @@
     annotationZoom7: () => gallery("annotation", 7, true),
   };
 
-  function week(title, dates) {
-    const box = dialog(title + " · 周历演示");
-    const actions = element("div");
-    actions.className = "review-actions";
-    for (const date of dates) actions.append(button(date, () => { box.close(); go("03-04"); }));
-    actions.append(button("回到本周", () => { box.close(); go("03-01"); }));
-    box.append(actions);
+  function selectCalendarDay(week, day) {
+    const target = week === 0 ? publishedDays[day] : null;
+    if (target) return go(target);
+    const selected = calendarSelection();
+    if (id() === "03-04" && selected.week === week && selected.day === day) return;
+    const focusLabel = document.activeElement?.closest("#hotspots button")?.getAttribute("aria-label");
+    history.pushState({ calendar: { week, day } }, "", "#03-04");
+    go("03-04");
+    if (focusLabel) Array.from(document.querySelectorAll("#hotspots button"))
+      .find(control => control.getAttribute("aria-label") === focusLabel)?.focus({ preventScroll: true });
   }
 
+  function changeWeek(offset) {
+    const { week, day } = calendarSelection();
+    selectCalendarDay(week + offset, day);
+  }
+
+  function renderCalendar(page) {
+    const { week, day } = calendarSelection();
+    const controls = Array.from(document.querySelectorAll("#hotspots button"));
+    for (const control of controls) {
+      const index = weekdays.indexOf(control.getAttribute("aria-label"));
+      if (index === -1) continue;
+      control.setAttribute("aria-pressed", String(index === day));
+      control.title = `${weekdays[index]} · ${fullDate(calendarDate(week, index))}`;
+      control.setAttribute("aria-description", `${fullDate(calendarDate(week, index))}，${week === 0 && publishedDays[index] ? "有课" : "暂无已发布课程"}`);
+    }
+    if (page.id !== "03-04") return;
+    const announcement = element("span", `${fullDate(calendarDate(week, day))}当天暂无已发布课程`);
+    announcement.className = "calendar-preview-announcement";
+    announcement.setAttribute("role", "status");
+    layer.append(announcement);
+    if (week === 0 && day === 3) return;
+
+    const range = element("div", `${fullDate(calendarDate(week, 0))}—${fullDate(calendarDate(week, 6))}`);
+    range.className = "calendar-preview-range";
+    const days = element("div");
+    days.className = "calendar-preview-days";
+    weekdays.forEach((label, index) => {
+      const cell = element("div");
+      if (index === day) cell.className = "selected";
+      cell.append(element("span", label), element("strong", calendarDate(week, index).getUTCDate()));
+      if (week === 0 && publishedDays[index]) cell.append(element("i"));
+      days.append(cell);
+    });
+    range.setAttribute("aria-hidden", "true");
+    days.setAttribute("aria-hidden", "true");
+    layer.append(range, days);
+  }
+
+  weekdays.forEach((_, day) => {
+    handlers["calendarDay" + day] = () => selectCalendarDay(calendarSelection().week, day);
+  });
   for (let i = 0; i < 8; i++) handlers["annotation" + i] = () => gallery("annotation", i);
   for (let i = 0; i < 2; i++) handlers["homeworkPhoto" + i] = () => gallery("homework", i);
   wrong.forEach(([number, question, answer], i) => {
@@ -376,6 +430,7 @@
     }
     form = consent = null;
     if (page.form) renderForm(page.form === "register");
+    if (page.controls?.some(([, to]) => to === "!previousWeek")) renderCalendar(page);
     if (page.id === "08-01") atlasState = null;
     if (page.atlas && page.id !== "08-01") layer.append(atlas(page.id.slice(3)));
   };
