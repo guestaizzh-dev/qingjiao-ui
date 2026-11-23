@@ -1,0 +1,356 @@
+(() => {
+  const screen = document.getElementById("screen");
+  const layer = document.createElement("div");
+  layer.className = "review-interactive";
+  screen.append(layer);
+  const art = document.getElementById("screen-image");
+  let entry = "00";
+  let form;
+  let consent;
+  let codeSent = false;
+  let toastTimer;
+  let atlasState;
+  const id = () => window.review.current();
+  const go = target => {
+    if (target !== id()) entry = id();
+    window.review.go(target);
+  };
+  const returnTo = () => window.review.go(entry === id() ? "00" : entry);
+
+  function element(tag, text) {
+    const node = document.createElement(tag);
+    if (text !== undefined) node.textContent = text;
+    return node;
+  }
+
+  function button(label, fn) {
+    const control = element("button", label);
+    control.type = "button";
+    control.onclick = fn;
+    return control;
+  }
+
+  function notify(message) {
+    document.querySelector(".review-toast")?.remove();
+    clearTimeout(toastTimer);
+    const notice = element("div", message);
+    notice.className = "review-toast";
+    notice.setAttribute("role", "status");
+    document.body.append(notice);
+    toastTimer = setTimeout(() => notice.remove(), 3500);
+  }
+
+  function dialog(title) {
+    document.querySelector(".review-dialog")?.close();
+    const box = element("dialog");
+    box.className = "review-dialog";
+    box.setAttribute("aria-label", title);
+    const close = button("关闭", () => box.close());
+    close.className = "review-close";
+    box.append(close, element("h2", title));
+    box.onclose = () => box.remove();
+    document.body.append(box);
+    box.showModal();
+    return box;
+  }
+
+  function choices(title, options, selected, onSubmit) {
+    const box = dialog(title);
+    for (const [label, items] of options) {
+      const field = element("label", label);
+      const select = element("select");
+      for (const item of items) select.add(new Option(item, item));
+      select.value = selected[label] || items[0];
+      select.onchange = () => selected[label] = select.value;
+      const row = element("div");
+      row.className = "review-actions";
+      row.append(field, select);
+      field.htmlFor = select.id = "review-select-" + label;
+      box.append(row);
+    }
+    const actions = element("div");
+    actions.className = "review-actions";
+    actions.append(button("确认", () => {
+      box.close();
+      onSubmit();
+    }));
+    box.append(actions);
+  }
+
+  function crop(file, [left, top, width, height]) {
+    const frame = element("div");
+    frame.style.aspectRatio = (852 * width) / (1846 * height);
+    frame.style.position = "relative";
+    frame.style.overflow = "hidden";
+    const image = element("img");
+    image.alt = "";
+    image.src = file;
+    Object.assign(image.style, {
+      position: "absolute",
+      width: (10000 / width) + "%",
+      maxWidth: "none",
+      left: (-left / width * 100) + "%",
+      top: (-top / height * 100) + "%",
+    });
+    frame.append(image);
+    return frame;
+  }
+
+  function gallery(type, start, magnified = false) {
+    const annotation = type === "annotation";
+    const count = annotation ? 8 : 2;
+    const box = dialog(annotation ? "批改原图 · 示例" : "作业图片 · 示例");
+    const view = element("div");
+    view.className = "viewer";
+    const status = element("span");
+    status.setAttribute("aria-live", "polite");
+    let index = start;
+    let scale = magnified ? 1.6 : 1;
+    function paint() {
+      let media;
+      if (annotation && [0, 7].includes(index)) {
+        media = crop(index === 0 ? "screens/07-15.png" : "screens/07-17.png", [5, 15, 90, 64]);
+      } else if (annotation) {
+        media = element("div");
+        media.className = "annotation-art" + (index === 5 ? " single" : "");
+        media.style.backgroundPosition = (index % 2 * 100) + "% " + (Math.floor(index / 2) * 100 / 3) + "%";
+      } else {
+        media = crop("screens/06-17.png", [index === 0 ? 5 : 52, 38, 42, 26.5]);
+      }
+      media.style.width = (scale * 100) + "%";
+      media.setAttribute("role", "img");
+      media.setAttribute("aria-label", "第" + (index + 1) + "张图片");
+      view.replaceChildren(media);
+      status.textContent = (index + 1) + " / " + count + " · " + Math.round(scale * 100) + "%";
+      prev.disabled = index === 0;
+      next.disabled = index === count - 1;
+      minus.disabled = scale <= 1;
+      plus.disabled = scale >= 3;
+    }
+
+    function step(amount) {
+      index = Math.min(count - 1, Math.max(0, index + amount));
+      scale = 1;
+      view.scrollTo(0, 0);
+      paint();
+    }
+
+    const prev = button("上一张", () => step(-1));
+    const next = button("下一张", () => step(1));
+    const minus = button("缩小", () => { scale = Math.max(1, scale - .3); paint(); });
+    const plus = button("放大", () => { scale = Math.min(3, scale + .3); paint(); });
+    const reset = button("还原", () => { scale = 1; view.scrollTo(0, 0); paint(); });
+    const actions = element("div");
+    actions.className = "review-actions";
+    actions.append(prev, next, minus, plus, reset, status);
+    box.append(view, actions);
+    box.onkeydown = event => {
+      if (event.key === "ArrowLeft") step(-1);
+      if (event.key === "ArrowRight") step(1);
+    };
+    paint();
+  }
+
+  function input(name, hint, x, y, width, maxLength) {
+    const field = element("input");
+    field.placeholder = hint;
+    field.setAttribute("aria-label", name);
+    field.autocomplete = "off";
+    if (maxLength) {
+      field.inputMode = "numeric";
+      field.maxLength = maxLength;
+    }
+    Object.assign(field.style, { left: x + "%", top: y + "%", width: width + "%", height: "3.6%" });
+    layer.append(field);
+    return field;
+  }
+
+  function renderForm(register) {
+    form = {
+      phone: input("手机号", "请输入手机号", 25, register ? 38.1 : 42.25, 60, 11),
+      code: input("短信验证码", "请输入短信验证码", 12, register ? 55.2 : 50.8, 50, 6),
+      name: register ? input("学生姓名", "请输入学生姓名", 12, 46.7, 75) : null,
+    };
+    consent = element("input");
+    consent.type = "checkbox";
+    consent.setAttribute("aria-label", "已阅读并同意协议");
+    Object.assign(consent.style, { left: "7.9%", top: register ? "61.7%" : "57.5%" });
+    layer.append(consent);
+    form.code.onkeydown = event => {
+      if (event.key === "Enter") window.currentReviewAction("auth");
+    };
+  }
+
+  function atlas(mode, unit = 0, standalone = false) {
+    const frame = element("iframe");
+    frame.title = "知识地图交互预览";
+    frame.className = "atlas-frame";
+    const saved = standalone ? {} : (atlasState || {});
+    frame.src = "atlas/index.html#" + [mode, saved.unit ?? unit, standalone ? "dialog" : "", saved.index ?? 0, saved.returnMode ?? "01"].join(",");
+    return frame;
+  }
+
+  function openAtlas(mode = "01", unit = 0) {
+    const box = dialog("知识地图");
+    box.append(atlas(mode, unit, true));
+  }
+
+  function feedback() {
+    const box = dialog("提交反馈 · 演示");
+    const form = element("form");
+    const category = element("select");
+    for (const name of ["建议", "问题", "表扬"]) category.add(new Option(name));
+    const description = element("textarea");
+    description.maxLength = 500;
+    description.required = true;
+    const contact = element("select");
+    for (const name of ["暂时不需要", "是，需要联系"]) contact.add(new Option(name));
+    for (const [label, control] of [["反馈类型", category], ["描述（500 字以内）", description], ["是否需要人工联系", contact]]) {
+      const field = element("label", label);
+      field.append(control);
+      form.append(field);
+    }
+    const submit = element("button", "提交反馈");
+    submit.type = "submit";
+    form.append(submit);
+    form.onsubmit = event => {
+      event.preventDefault();
+      if (!description.value.trim()) return description.focus();
+      box.close();
+      notify("演示反馈已提交");
+    };
+    box.append(form);
+  }
+
+  const wrong = [
+    ["3", "1.2 × 5", "6"], ["4", "0.8 × 4", "3.2"], ["5", "2.5 × 3", "7.5"],
+    ["6", "2.5 × 4", "10"], ["7", "0.12 × 3", "0.36"], ["8", "1.6 × 5", "8"], ["9", "0.9 × 7", "6.3"]
+  ];
+  const textbookSelection = {};
+  let speed = 1;
+  let muted = false;
+  let playing = false;
+  const handlers = {
+    back: returnTo,
+    atlas: () => openAtlas("05"),
+    atlasRoute: () => openAtlas(),
+    unit1: () => openAtlas("04", 1),
+    unit2: () => openAtlas("04", 2),
+    sms: () => {
+      if (!/^1\d{10}$/.test(form?.phone.value || "")) {
+        notify("请输入 11 位演示手机号");
+        form?.phone.focus();
+        return;
+      }
+      codeSent = true;
+      form.code.focus();
+      notify("演示验证码 682417");
+    },
+    consent: () => consent.click(),
+    auth: () => {
+      if (!consent?.checked) return notify("请先阅读并勾选协议");
+      if (form.name && !form.name.value.trim()) return notify("请填写学生姓名");
+      if (!codeSent) return handlers.sms();
+      if (form.code.value !== "682417") return notify("验证码有误，请输入演示码 682417");
+      codeSent = false;
+      go(id() === "02-02" ? "02-03" : "02-04");
+    },
+    userPolicy: () => dialog("用户协议").append(element("p", "此处为协议阅读入口，正式正文由应用提供。")),
+    privacy: () => dialog("隐私政策").append(element("p", "此处为协议阅读入口，正式正文由应用提供。")),
+    childPrivacy: () => dialog("儿童隐私政策").append(element("p", "此处为协议阅读入口，正式正文由应用提供。")),
+    textbook: () => choices("选择教材", [
+      ["学段", ["小学", "初中"]], ["年级", ["一年级", "二年级", "三年级", "四年级", "五年级", "六年级"]],
+      ["版本", ["人教版", "北师大版", "苏教版"]], ["册别", ["上册", "下册"]]
+    ], textbookSelection, () => go(Object.values(textbookSelection).every(value => ["小学", "一年级", "人教版", "上册"].includes(value)) ? "01-12" : "01-14")),
+    previousWeek: () => week("上一周", ["10 月 26 日", "10 月 28 日", "10 月 30 日"]),
+    nextWeek: () => week("下一周", ["11 月 9 日", "11 月 11 日", "11 月 13 日"]),
+    video: () => { playing = !playing; notify(playing ? "已播放 · 演示" : "已暂停"); },
+    speed: () => {
+      const selection = { 倍速: String(speed) };
+      choices("播放速度", [["倍速", ["0.75", "1", "1.25", "1.5", "2"]]], selection, () => {
+        speed = Number(selection.倍速);
+        notify("播放速度 " + speed + "×");
+      });
+    },
+    volume: () => { muted = !muted; notify(muted ? "已静音" : "已恢复声音"); },
+    fullscreen: () => {
+      const box = dialog("课堂画面");
+      box.append(crop(art.getAttribute("src"), [3.5, 14.2, 93, 20.4]));
+    },
+    slides: () => {
+      const slide = { "05-04": [3, ["沿高割补，面积不变", "长方形的长对应该图形的底", "面积等于底乘高"]], "05-06": [2, ["给定数字和小数点", "有序排列，不重复、不遗漏"]], "05-15": [1, ["相同小数连加可以写成乘法"]] }[id()];
+      const box = dialog("课堂截图");
+      const canvas = crop(art.getAttribute("src"), [5, 62.5, 90, 22]);
+      const caption = element("p");
+      let index = 0;
+      const paint = () => {
+        caption.textContent = (index + 1) + " / " + slide[0] + "　" + slide[1][index];
+      };
+      box.append(canvas, caption, button("上一张", () => { index = Math.max(0, index - 1); paint(); }), button("下一张", () => { index = Math.min(slide[0] - 1, index + 1); paint(); }));
+      paint();
+    },
+    thirdVideo: () => dialog("小数乘法的应用").append(element("p", "每支彩笔 2.5 元，3 支共 7.5 元。先找数量关系，再列式计算。")),
+    print: () => {
+      const box = dialog("原练习 · 10 道题");
+      const questions = ["0.6 × 4.5", "3.2 × 0.7", "小禾每天步行 1.2 千米，5 天共步行多少千米？", "每支铅笔 0.8 元，4 支多少钱？", "一条彩带 2.5 米，3 条共多少米？", "2.5 × 4", "0.12 × 3", "1.6 × 5", "0.9 × 7", "每支铅笔 1.5 元，4 支共多少元？"];
+      const list = element("ol");
+      for (const question of questions) list.append(element("li", question));
+      const print = button("打印 / 保存 PDF", () => {
+        const restore = () => document.body.classList.remove("print-review");
+        document.body.classList.add("print-review");
+        window.addEventListener("afterprint", restore, { once: true });
+        window.print();
+        restore();
+      });
+      print.className = "review-actions";
+      box.append(element("p", "姓名 __________　日期 __________"), list, print);
+    },
+    permissions: () => notify("相册权限由手机系统管理，可返回选择拍照演示"),
+    feedback,
+    contact: () => dialog("联系专员").append(element("p", "此处演示联系入口。服务专员的联系方式由应用提供。")),
+    homeworkPhotoZoom: () => gallery("homework", 0, true),
+    annotationZoom7: () => gallery("annotation", 7, true),
+  };
+
+  function week(title, dates) {
+    const box = dialog(title + " · 周历演示");
+    const actions = element("div");
+    actions.className = "review-actions";
+    for (const date of dates) actions.append(button(date, () => { box.close(); go("03-04"); }));
+    actions.append(button("回到本周", () => { box.close(); go("03-01"); }));
+    box.append(actions);
+  }
+
+  for (let i = 0; i < 8; i++) handlers["annotation" + i] = () => gallery("annotation", i);
+  for (let i = 0; i < 2; i++) handlers["homeworkPhoto" + i] = () => gallery("homework", i);
+  wrong.forEach(([number, question, answer], i) => {
+    handlers["wrong" + i] = () => {
+      const box = dialog("第 " + (i + 1) + " 道错题");
+      box.append(element("p", "原练习第 " + number + " 题"), element("p", question), element("p", "参考答案 " + answer), element("p", "先按整数乘法计算，再检查积的小数点和单位。"));
+    };
+  });
+
+  window.currentReviewAction = action => handlers[action]?.();
+  window.currentReviewTransition = go;
+  window.renderCurrentReview = page => {
+    document.querySelector(".review-dialog")?.close();
+    document.querySelector(".review-toast")?.remove();
+    layer.replaceChildren();
+    form = consent = null;
+    if (page.form) renderForm(page.form === "register");
+    if (page.id === "08-01") atlasState = null;
+    if (page.atlas && page.id !== "08-01") layer.append(atlas(page.id.slice(3)));
+  };
+  window.addEventListener("message", event => {
+    if (event.origin !== location.origin) return;
+    const modal = document.querySelector(".review-dialog .atlas-frame");
+    if (event.source === modal?.contentWindow && event.data?.target === "close") modal.closest("dialog").close();
+    if (event.source !== layer.querySelector("iframe")?.contentWindow) return;
+    if (/^0[1-4]$/.test(event.data?.atlas || "")) {
+      atlasState = event.data;
+      go("08-" + event.data.atlas);
+    }
+    if (event.data?.target === "00") go("00");
+  });
+  window.review.go(id(), false);
+})();

@@ -1,0 +1,44 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>知识地图</title><style>
+*{box-sizing:border-box}body{margin:0;font:28px "PingFang SC",sans-serif;color:#123f33;background:#faf8f3}#canvas{position:absolute;width:852px;height:1846px;transform-origin:top left;overflow:hidden;background:url(../screens/08-01.png) center/cover}button{color:inherit;font:inherit;cursor:pointer}#stage{position:absolute;inset:212px 0 0;overflow:hidden;touch-action:none}#land{width:852px;height:1634px;position:absolute;transform-origin:0 0;background:url(../screens/08-01.png) 0 -212px/852px 1846px}.chapter #land{background:url(terrain.png) center/cover}.chapter #stage{background:#fcfaf6}.hit{position:absolute;border:0;background:transparent}.hit:focus-visible{outline:4px solid #13724d}.chapterInfo{position:absolute;left:174px;top:65px}.eyebrow{font-size:24px;color:#567568}.chapterInfo h2{margin:7px 0 12px;font-size:52px}.muted{font-size:26px;color:#527065}.point{border:0;background:transparent;display:flex;align-items:center;gap:19px;position:absolute;transform:translate(-24px,-50%);font-size:32px;font-weight:600;white-space:nowrap}.dot{width:36px;height:36px;box-shadow:0 0 0 5px white;border:5px solid #219a62;border-radius:50%;background:#219a62}.s1{background:#efa845;border-color:#efa845}.s2{background:white}.s3{background:#c8d1ca;border-color:#c8d1ca}#card{position:absolute;left:32px;right:32px;bottom:65px;background:white;border:1px solid #dce9df;border-radius:30px;padding:34px 40px;box-shadow:0 8px 36px #204c3212}#card h2{font-size:39px;margin:8px 0 20px}#card p{margin:10px 0;color:#4e675d}#card .close{position:absolute;top:23px;right:24px;border:0;background:#f1f6f2;border-radius:50%;width:58px;height:58px;font-size:31px}#card.legend{width:485px;left:auto;bottom:auto;top:154px;padding:30px}.row{display:flex;align-items:center;gap:20px;padding:15px 0}.row small{margin-left:auto;color:#64776c}.row .dot{width:26px;height:26px}.tools{position:absolute;right:24px;bottom:129px;display:grid;gap:10px}.tools button{border:1px solid #d6e2d8;background:white;border-radius:22px;width:76px;height:76px;font-size:37px}.bar{position:absolute;bottom:20px;left:280px;width:292px;height:11px;border-radius:8px;background:#102e24}.book-list{position:absolute;top:160px;left:60px;right:60px;display:grid;gap:25px}.book-list button{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:100px;padding:22px 32px;border:1px solid #d9e5dc;border-radius:24px;background:#fff;font-weight:600}.book-list small{font-size:24px;color:#526e61}.list-back{padding:15px 22px;color:#176749}.line{position:absolute;inset:0;pointer-events:none}
+</style><div id="canvas"><div id="stage"><div id="land"></div></div><div id="ui"></div><div class="bar"></div></div><script>
+const $=id=>document.getElementById(id),land=$('land'),ui=$('ui'),cv=$('canvas');const [startMode, startUnit, appearance, startIndex, fromMode]=location.hash.slice(1).split(',');
+const independent=appearance==='dialog';
+let mode=startMode||'01',unit=Number(startUnit)||0,idx=Number(startIndex)||0,z=1,dx=0,dy=0,returnMode=fromMode||'01';
+const units=[
+ ['小数乘法',7,24,['小数乘整数','小数乘小数','积的近似数','积的小数位数','扩大与缩小','积的大小比较','小数乘法竖式']],
+ ['位置',2,13,['用数对表示位置','根据数对找位置']],
+ ['小数除法',5,27,['除数是整数的小数除法','一个数除以小数','商的近似数','循环小数']],
+ ['可能性',1,9,['事件发生的可能性','可能性的大小']],
+ ['简易方程',3,31,['用字母表示数','等式的性质','解方程','实际问题与方程']],
+ ['多边形的面积',3,23,['平行四边形的面积','三角形的面积','梯形的面积','组合图形的面积']],
+ ['植树问题',1,11,['两端都栽','两端都不栽','封闭路线植树']],
+ ['总复习',0,7,['数与代数','图形与几何','综合应用']]
+];
+const order=['一','二','三','四','五','六','七','八'];const status=[0,1,2,0,1,3,0],states=['已达标','待巩固','待点亮','计划外'],xy=[[120,380],[315,516],[490,650],[385,878],[175,1020],[250,1175],[448,1314]];
+if(!Number.isInteger(unit)||unit<0||unit>=units.length)unit=0;
+function resize(){cv.style.transform='scale('+Math.min(innerWidth/852,innerHeight/1846)+')'}onresize=resize;resize();
+function view(m){mode=m;render();if(parent!==window&&!independent)parent.postMessage({atlas:m,unit,index:idx,returnMode},location.origin)}
+function act(el,txt,x,y,w,h,fn){let b=document.createElement('button');b.className='hit';b.setAttribute('aria-label',txt);Object.assign(b.style,{left:x+'px',top:y+'px',width:w+'px',height:h+'px'});b.onclick=fn;el.append(b)}
+function transform(){dx=Math.max(852*(1-z),Math.min(0,dx));dy=Math.max(1634*(1-z),Math.min(0,dy));land.style.transform='translate('+dx+'px,'+dy+'px) scale('+z+')'}
+function zoom(v){let old=z;z=Math.min(2.5,Math.max(1,v));dx=426-(426-dx)*z/old;dy=817-(817-dy)*z/old;transform()}
+function render(){const [unitName,completed,total,points]=units[unit];let ch=mode==='03'||mode==='04'||(mode==='02'&&returnMode==='04');cv.classList.toggle('chapter',ch||mode==='05');land.innerHTML='';ui.innerHTML='';
+if(ch){land.innerHTML='<div class="chapterInfo"><div class="eyebrow">第'+order[unit]+'单元</div><h2>'+unitName+'</h2><div class="muted">已点亮 '+completed+' / '+total+(unit?' · 展示部分知识点':'')+'</div></div><svg class="line" width="852" height="1634"><path d="M120 380 C140 430 260 475 315 516 S540 595 490 650 S465 803 385 878 S170 940 175 1020 S178 1140 250 1175 S440 1250 448 1314 S480 1490 410 1634" fill="none" stroke="#9dc9af" stroke-width="6" stroke-linecap="round" stroke-dasharray="2 13"/></svg>';xy.slice(0,points.length).forEach(([x,y],i)=>{let b=document.createElement('button');b.className='point';b.setAttribute('aria-label',points[i]);b.style.left=x+'px';b.style.top=y+'px';b.innerHTML='<i class="dot s'+(unit?2:status[i])+'"></i>'+points[i];b.onclick=()=>{idx=i;view('03')};land.append(b)})}else if(mode==='05'){
+ const list=document.createElement('section');list.className='book-list';list.setAttribute('aria-label','全册八个单元');
+ units.forEach(([name,done,all],i)=>{
+   const b=document.createElement('button');b.innerHTML='<span>'+name+'</span><small>'+done+' / '+all+' 已点亮</small>';
+   b.onclick=()=>{unit=i;idx=0;zoom(1);view('04')};list.append(b)
+ });
+ land.append(list);
+}else{
+ act(land,'查看小数乘法知识点',38,178,339,306,()=>{unit=0;zoom(1);view('04')});
+ act(land,'位置',510,799,207,121,()=>{unit=1;zoom(1);view('04')});
+ act(land,'小数除法',135,1220,260,123,()=>{unit=2;zoom(1);view('04')});
+}
+act(ui,'返回',12,60,90,86,()=>{if(mode==='01'){if(parent!==window)parent.postMessage({target:independent?'close':'00'},location.origin)}else view(mode==='03'?'04':mode==='02'?returnMode:independent&&mode==='04'?'05':'01')});
+if(mode==='01'||mode==='04'){let d=document.createElement('div');d.className='tools';for(let [s,l,fn] of [['＋','放大',()=>zoom(z+.35)],['−','缩小',()=>zoom(z-.35)],['◎','复位',()=>zoom(1)],['ⓘ','状态说明',()=>{returnMode=ch?'04':'01';view('02')}],...(independent?[['≡','全册单元',()=>{zoom(1);view('05')}]]:[])]){let b=document.createElement('button');b.textContent=s;b.setAttribute('aria-label',l);b.onclick=fn;d.append(b)}ui.append(d)}
+if(mode==='02'||mode==='03'){let c=document.createElement('section');c.id='card';if(mode==='02'){c.className='legend';c.innerHTML='<h2>状态说明</h2>'+states.map((s,i)=>'<div class="row"><i class="dot s'+i+'"></i>'+s+'<small>'+['正确率 ≥ 80%','正确率 < 80%','等待学习结果','未纳入计划'][i]+'</small></div>').join('')+'<p>绿色和橙色都计入已点亮。</p>'}else{c.innerHTML='<div class="eyebrow">知识点详情</div><h2>'+points[idx]+'</h2><p>当前状态　'+(unit?'状态待更新':states[status[idx]])+'</p><p>所属单元　'+unitName+'</p>'+(!unit&&idx===0?'<p>视频　小数乘整数 · 第3课时</p><p>练习已复核 · 正确率 ≥ 80%</p><p>老师反馈已发布</p>':'')}let b=document.createElement('button');b.className='close';b.textContent='×';b.ariaLabel='关闭';b.onclick=()=>view(mode==='02'?returnMode:'04');c.append(b);ui.append(c)}transform()}
+window.addEventListener('keydown',event=>{
+  if(event.key==='Escape' && independent && parent!==window) parent.postMessage({target:'close'},location.origin);
+});
+const st=$('stage');st.addEventListener('wheel',e=>{if(e.ctrlKey){e.preventDefault();zoom(z*(e.deltaY>0?.94:1.06))}},{passive:false});let drag=null;st.onpointerdown=e=>{if(z>1&&!e.target.closest('button')){drag=[e.clientX,e.clientY,dx,dy];st.setPointerCapture(e.pointerId)}};st.onpointermove=e=>{if(drag){let scale=cv.getBoundingClientRect().width/852;dx=drag[2]+(e.clientX-drag[0])/scale;dy=drag[3]+(e.clientY-drag[1])/scale;transform()}};st.onpointerup=st.onpointercancel=()=>drag=null;render()
+</script></html>
