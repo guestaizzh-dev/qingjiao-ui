@@ -5,6 +5,7 @@
   screen.append(layer);
   const art = document.getElementById("screen-image");
   let entry = "00";
+  let activityReturn;
   let form;
   let consent;
   let codeSent = false;
@@ -12,7 +13,10 @@
   let atlasState;
   const id = () => window.review.current();
   const go = target => {
-    if (target !== id()) entry = id();
+    const source = id();
+    if (/^09-0[1-8]$/.test(source) && /^(06|07)-/.test(target)) activityReturn = source;
+    if (!/^(06|07)-/.test(target)) activityReturn = undefined;
+    if (target !== source) entry = source;
     window.review.go(target);
   };
   const returnTo = () => window.review.go(entry === id() ? "00" : entry);
@@ -153,6 +157,7 @@
 
   function input(name, hint, x, y, width, maxLength) {
     const field = element("input");
+    field.className = "auth-field";
     field.placeholder = hint;
     field.setAttribute("aria-label", name);
     field.autocomplete = "off";
@@ -167,9 +172,9 @@
 
   function renderForm(register) {
     form = {
-      phone: input("手机号", "请输入手机号", 25, register ? 38.1 : 42.25, 60, 11),
-      code: input("短信验证码", "请输入短信验证码", 12, register ? 55.2 : 50.8, 50, 6),
-      name: register ? input("学生姓名", "请输入学生姓名", 12, 46.7, 75) : null,
+      phone: input("手机号", "请输入手机号", 24.5, register ? 38.0 : 42.15, 60, 11),
+      code: input("短信验证码", "请输入短信验证码", 11.7, register ? 55.2 : 50.8, 50, 6),
+      name: register ? input("学生姓名", "请输入学生姓名", 11.7, 46.7, 75) : null,
     };
     consent = element("input");
     consent.type = "checkbox";
@@ -232,6 +237,9 @@
   let playing = false;
   const handlers = {
     back: returnTo,
+    returnProfile: () => go(/^09-(09|10|11|12)$/.test(entry) ? entry : "09-09"),
+    backFromFeedback: () => go(activityReturn || "04-05"),
+    backFromHomework: () => go(activityReturn || "04-06"),
     atlas: () => openAtlas("05"),
     atlasRoute: () => openAtlas(),
     unit1: () => openAtlas("04", 1),
@@ -305,7 +313,24 @@
       print.className = "review-actions";
       box.append(element("p", "姓名 __________　日期 __________"), list, print);
     },
-    permissions: () => notify("相册权限由手机系统管理，可返回选择拍照演示"),
+    permissions: () => {
+      const box = dialog("相册访问");
+      box.append(element("p", "在手机设置中打开青椒伴学的照片访问权限，然后回到作业页。"));
+      const actions = element("div");
+      actions.className = "review-actions";
+      actions.append(
+        button("继续拍照", () => { box.close(); go("06-06"); }),
+        button("演示已开启权限", () => { box.close(); go("06-26"); }),
+      );
+      box.append(actions);
+    },
+    retrySummary: () => {
+      const box = dialog("内容总结");
+      box.append(element("p", "相同的小数连加，可以用乘法来表示。"));
+      const summary = element("ul");
+      for (const point of ["0.3 连加 4 次，可以写成 0.3 × 4。", "4 个 0.3 合起来是 1.2。"]) summary.append(element("li", point));
+      box.append(summary);
+    },
     feedback,
     contact: () => dialog("联系专员").append(element("p", "此处演示联系入口。服务专员的联系方式由应用提供。")),
     homeworkPhotoZoom: () => gallery("homework", 0, true),

@@ -71,3 +71,11 @@
 @media print { body.print-review > :not(.review-dialog) { display:none !important; } body.print-review dialog { position:static; max-height:none; width:100%; border:0; } .review-dialog .review-close,.review-dialog .review-actions { display:none; } }
 .detail-jump { display: none; }
 @media (max-width: 900px) { .detail-jump { display: inline-block; font-size: 12px; padding: 0 8px; } }
+
+/* The PNG already contains the empty-field labels. */
+.review-interactive .auth-field::placeholder { color: transparent; }
+.review-interactive .auth-field:placeholder-shown { background: transparent; }
+.review-interactive .auth-field:focus-visible {
+  outline: none;
+  box-shadow: 0 2px #15805a;
+}
